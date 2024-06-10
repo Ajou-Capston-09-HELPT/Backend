@@ -1,9 +1,6 @@
 package com.HELPT.Backend.domain.gym;
 
-import com.HELPT.Backend.domain.gym.dto.GymRegistrationDto;
-import com.HELPT.Backend.domain.gym.dto.GymResistrationRequest;
-import com.HELPT.Backend.domain.gym.dto.GymResponse;
-import com.HELPT.Backend.domain.gym.dto.GymRequest;
+import com.HELPT.Backend.domain.gym.dto.*;
 import com.HELPT.Backend.domain.gym.entity.GymRegistration;
 import com.HELPT.Backend.domain.gymequipment.GymEquipmentService;
 import com.HELPT.Backend.domain.gymequipment.dto.GymEquipmentResponse;
@@ -49,15 +46,20 @@ public class GymController {
     }
 
     @PutMapping("/{gymId}/chat-link")
-    public ResponseEntity<GymResponse> chatLinkModify(@RequestBody Map<String, String> map,@PathVariable Long gymId){
-        return ResponseEntity.ok(gymService.modifyChatLink(gymId,map.get("chatLink")));
+    public ResponseEntity<GymResponse> chatLinkModify(@RequestBody ChatLinkDto chatLinkDto, @PathVariable Long gymId){
+        return ResponseEntity.ok(gymService.modifyChatLink(gymId,chatLinkDto.getChatLink()));
     }
 
     @GetMapping("/{gymId}/chat-link")
-    public ResponseEntity<Map<String,String>> chatLinkModify(@PathVariable Long gymId){
+    public ResponseEntity<Map<String,String>> findChatLink(@PathVariable Long gymId){
         Map<String, String> map = new HashMap<>();
         map.put("chatLink",gymService.getChatLink(gymId));
         return ResponseEntity.ok(map);
+    }
+
+    @DeleteMapping("/{gymId}/chat-link")
+    public ResponseEntity<Boolean> removeChatLink(@PathVariable Long gymId){
+        return ResponseEntity.ok(gymService.removeChatLink(gymId));
     }
 
     @GetMapping("/{gymId}")

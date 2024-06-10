@@ -23,6 +23,8 @@ public class Exercise {
 
     private String topImage;
 
+    private String videoUrl;
+
     public void updateDescription(String equipmentName) {
         this.exerciseDescription = equipmentName;
     }

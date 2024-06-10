@@ -57,11 +57,24 @@ public class GymService {
         return gym.getChat_link();
     }
 
+    @Transactional
+    public Boolean removeChatLink(Long gymId) {
+        Gym gym = gymRepository.findById(gymId).orElseThrow(() -> new RuntimeException("Gym not found"));
+        gym.updateChatLink(null);
+        return Boolean.TRUE;
+    }
+
     @Transactional(readOnly = true)
     public GymResponse findGym(Long id) {
         Gym gym = gymRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_EXIST_DATA));
         return GymResponse.toDto(gym);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Gym> findGymList() {
+        List<Gym> gymList = gymRepository.findAll();
+        return gymList;
     }
 
     @Transactional(readOnly = true)

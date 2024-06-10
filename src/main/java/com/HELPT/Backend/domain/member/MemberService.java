@@ -1,5 +1,6 @@
 package com.HELPT.Backend.domain.member;
 
+import com.HELPT.Backend.domain.fcm.DeviceTokenService;
 import com.HELPT.Backend.domain.member.Dto.MemberDetailResponse;
 import com.HELPT.Backend.domain.member.Dto.MemberJoinResponse;
 import com.HELPT.Backend.domain.member.Dto.MemberDto;
@@ -26,14 +27,16 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
+    private final DeviceTokenService deviceTokenService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public JWTResponse login(KakaoLoginRequest kakaoLoginRequest) {
         Optional<Member> member = memberRepository.findByKakaoId(kakaoLoginRequest.getKakaoId());
         if(member.isEmpty()){
             throw new CustomException(ErrorCode.NOT_EXIST_USER);
         }
         JWTToken jwt = jwtUtil.createTokens(member.get().getUserId());
+        deviceTokenService.saveDeviceToken(member.get().getUserId(),kakaoLoginRequest.getDeviceToken());
         return JWTResponse.builder().token(jwt).build();
     }
 
@@ -44,12 +47,11 @@ public class MemberService {
 
         Member member;
         if (existMember.isPresent()) {
-            member = existMember.get();
+            throw new CustomException(ErrorCode.EXIST_MEMBER);
         } else {
             memberRepository.save(memberDto.toEntity());
-            member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("Manager could not be retrieved after save."));
+            member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("Member could not be retrieved after save."));
         }
-
         JWTToken jwt = jwtUtil.createTokens(member.getUserId());
         return JWTResponse.builder().token(jwt).build();
     }

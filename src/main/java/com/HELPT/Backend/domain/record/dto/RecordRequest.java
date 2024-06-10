@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RecordRequest {
 
-    private Long equipmentId;
+    private Long gymEquipmentId;
 
     private int count;
 
@@ -20,24 +20,27 @@ public class RecordRequest {
 
     private int weight;
 
-    private LocalDateTime startTime;
-
-    private LocalDateTime endTime;
-
-    private LocalDate recordDate;
+    private String recordTime;
 
     private float successRate;
 
+    private String comment;
+
+    private String snapshotFile;
+
     @Builder
-    public RecordRequest(Long equipmentId, int count, int setNumber, int weight, LocalDate recordDate, float successRate,
-                         LocalDateTime startTime,LocalDateTime endTime) {
-        this.startTime=startTime;
-        this.endTime=endTime;
-        this.equipmentId = equipmentId;
+    public RecordRequest(Long gymEquipmentId, int count, int setNumber, int weight, LocalDate recordDate, float successRate,
+                         String recordTime ,String comment) {
+        this.recordTime = recordTime;
+        this.gymEquipmentId = gymEquipmentId;
         this.count = count;
         this.setNumber = setNumber;
         this.weight = weight;
-        this.recordDate = recordDate;
         this.successRate = successRate;
+        this.comment=comment;
+    }
+
+    public void setSnapshotFile(String snapshotFile) {
+        this.snapshotFile = snapshotFile;
     }
 }

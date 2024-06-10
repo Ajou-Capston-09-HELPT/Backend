@@ -5,11 +5,14 @@ import com.HELPT.Backend.domain.member.Dto.MemberJoinResponse;
 import com.HELPT.Backend.domain.member.Dto.MemberDto;
 import com.HELPT.Backend.global.auth.jwt.JWTResponse;
 import com.HELPT.Backend.global.common.dto.KakaoLoginRequest;
+import com.HELPT.Backend.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.HELPT.Backend.global.auth.SecurityUtil.getCurrentUserId;
@@ -24,11 +27,13 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<JWTResponse> login(@RequestBody KakaoLoginRequest kakaoLoginRequest) {
+
+        log.info("login : "+kakaoLoginRequest.getKakaoId());
         return ResponseEntity.ok(memberService.login(kakaoLoginRequest));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<JWTResponse> register(@RequestBody MemberDto memberDto) {
+    @PostMapping( "/register")
+    public ResponseEntity<JWTResponse> register(@RequestBody MemberDto memberDto){
         return ResponseEntity.ok(memberService.register(memberDto));
     }
 
