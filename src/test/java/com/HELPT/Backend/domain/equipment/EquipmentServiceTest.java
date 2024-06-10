@@ -1,5 +1,6 @@
 package com.HELPT.Backend.domain.equipment;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.HELPT.Backend.domain.equipment.dto.EquipmentDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
