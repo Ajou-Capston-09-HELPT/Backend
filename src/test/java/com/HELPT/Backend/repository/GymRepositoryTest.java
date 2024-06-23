@@ -1,4 +1,4 @@
-package com.HELPT.Backend.domain.gym.repository;
+package com.HELPT.Backend.repository;
 
 import org.junit.jupiter.api.Test;
 
