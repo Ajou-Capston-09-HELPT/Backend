@@ -3,33 +3,23 @@ package com.HELPT.Backend.domain.fcm;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Arrays;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class FirebaseCloudMessageService {
-
-//    private final SqlSession sqlSession;
-//
-//    public FcmServiceImpl(SqlSession ss) {
-//        this.sqlSession = ss;
-//    }
 
     public void sendMessageTo(FcmSendDto fcmSendDto) throws IOException {
 
@@ -52,15 +42,58 @@ public class FirebaseCloudMessageService {
         }
     }
 
-//    @Transactional(readOnly = true)
-//    public List selectFcmSendList() {
-//        FcmMapper udm = sqlSession.getMapper(FcmMapper.class);
-//        return udm.selectFcmSendList();
+//    private String getAccessToken() throws IOException {
+//        String firebaseConfigPath = "firebase/firebase_service_key.json";
+//
+//        GoogleCredentials googleCredentials = GoogleCredentials
+//                .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        googleCredentials.refreshIfExpired();
+//        return googleCredentials.getAccessToken().getTokenValue();
 //    }
 
+//    private String getAccessToken() throws IOException {
+//        String firebaseConfigPath = "firebase/firebase_service_key.json";
+//
+//        // Gson 세팅
+//        Gson gson = new GsonBuilder()
+//                .registerTypeAdapter(Duration.class, new DurationTypeAdapter())
+//                .setLenient().create();
+//
+//        JsonReader reader = new JsonReader(new InputStreamReader(new ClassPathResource(firebaseConfigPath).getInputStream()));
+//        reader.setLenient(true);
+//
+//        // Json파싱
+//        GoogleCredentials googleCredentials = gson.fromJson(reader, GoogleCredentials.class);
+//        googleCredentials = googleCredentials.createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        googleCredentials.refreshIfExpired();
+//        return googleCredentials.getAccessToken().getTokenValue();
+//    }
+//
+//    private String getAccessToken() throws IOException {
+//        String firebaseConfigPath = "firebase/firebase_service_key.json";
+//
+//        // GSON 설정
+//        Gson gson = new GsonBuilder()
+//                .setLenient()
+//                .create();
+//
+//        JsonReader reader = new JsonReader(new InputStreamReader(new ClassPathResource(firebaseConfigPath).getInputStream()));
+//        reader.setLenient(true);
+//
+//        // Json 파싱
+//        GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
+//                .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
+//
+//        googleCredentials.refreshIfExpired();
+//        return googleCredentials.getAccessToken().getTokenValue();
+//    }
     private String getAccessToken() throws IOException {
         String firebaseConfigPath = "firebase/firebase_service_key.json";
 
+        // GoogleCredentials 객체를 생성하여 액세스 토큰을 가져옵니다.
         GoogleCredentials googleCredentials = GoogleCredentials
                 .fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
                 .createScoped(List.of("https://www.googleapis.com/auth/cloud-platform"));
@@ -69,7 +102,8 @@ public class FirebaseCloudMessageService {
         return googleCredentials.getAccessToken().getTokenValue();
     }
 
-    private String makeMessage(FcmSendDto fcmSendDto) throws JsonProcessingException {
+
+    private String makeMessage(FcmSendDto fcmSendDto){
 
         ObjectMapper om = new ObjectMapper();
         FcmMessageDto fcmMessageDto = FcmMessageDto.builder()
@@ -84,7 +118,25 @@ public class FirebaseCloudMessageService {
                 .validateOnly(false)
                 .build();
 
-        return om.writeValueAsString(fcmMessageDto);
+        try {
+            return om.writeValueAsString(fcmMessageDto);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+//    private FcmMessageDto makeFmd(FcmSendDto fcmSendDto) {
+//
+//        return FcmMessageDto.builder()
+//                .message(FcmMessageDto.Message.builder()
+//                        .token(fcmSendDto.getToken())
+//                        .notification(FcmMessageDto.Notification.builder()
+//                                .body(fcmSendDto.getBody())
+//                                .title(fcmSendDto.getTitle())
+//                                //.image(null)
+//                                .build()
+//                        ).build())
+//                //.validateOnly(false)
+//                .build();
+//    }
 }
