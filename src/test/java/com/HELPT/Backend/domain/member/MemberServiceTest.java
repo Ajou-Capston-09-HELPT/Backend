@@ -72,7 +72,10 @@ class MemberServiceTest {
     @DisplayName("[Service] 회원 로그인 테스트")
     void loginServiceTest() {
         // given
-        KakaoLoginRequest kakaoLoginRequest = new KakaoLoginRequest("kakao123", "deviceToken");
+        KakaoLoginRequest kakaoLoginRequest = KakaoLoginRequest.builder()
+                .kakaoId("kakao123")
+                .deviceToken("deviceToken")
+                .build();
         given(memberRepository.findByKakaoId(anyString())).willReturn(Optional.of(member));
         given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
 
