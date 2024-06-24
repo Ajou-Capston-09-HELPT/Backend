@@ -1,11 +1,9 @@
 package com.HELPT.Backend.domain.exercise;
 
 import com.HELPT.Backend.domain.equipment.Equipment;
-import com.HELPT.Backend.domain.exercise.Exercise;
 import com.HELPT.Backend.domain.exercise.dto.ExerciseRequestDto;
 import com.HELPT.Backend.domain.exercise.dto.ExerciseResponseDto;
 import com.HELPT.Backend.domain.exercise.repository.ExerciseRepository;
-import com.HELPT.Backend.domain.exercise.service.ExerciseService;
 import com.HELPT.Backend.domain.gymequipment.GymEquipment;
 import com.HELPT.Backend.domain.gymequipment.GymEquipmentRepository;
 import com.HELPT.Backend.global.error.CustomException;
@@ -66,64 +64,48 @@ class ExerciseServiceTest {
 
     @Test
     @DisplayName("[Service] AI 코칭 기구 운동 정보 등록 테스트")
-    void uploadExerciseServiceTest() {
-//        // given
-//        given(exerciseRepository.save(any(Exercise.class))).willReturn(exercise);
-//
-//        // when
-//        ExerciseResponseDto response = exerciseService.uploadExercise(exerciseRequestDto, "topImage.jpg");
-//
-//        // then
-//        verify(exerciseRepository).save(any(Exercise.class));
-//        assertNotNull(response);
-//        assertThat(response.getExerciseDescription()).isEqualTo(exercise.getExerciseDescription());
+    void uploadExerciseTest() {
+        // given
+        given(exerciseRepository.save(any(Exercise.class))).willReturn(exercise);
+
+        // when
+        ExerciseResponseDto response = exerciseService.uploadExercise(exerciseRequestDto, "topImage.jpg");
+
+        // then
+        verify(exerciseRepository).save(any(Exercise.class));
+        assertNotNull(response);
+        assertThat(response.getExerciseDescription()).isEqualTo(exercise.getExerciseDescription());
     }
 
     @Test
     @DisplayName("[Service] AI 코칭 기구 운동 정보 조회 테스트")
-    void findExerciseServiceTest() {
-//        // given
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//        given(exerciseRepository.findById(anyLong())).willReturn(Optional.of(exercise));
-//
-//        // when
-//        ExerciseResponseDto response = exerciseService.findExercise(1L);
-//
-//        // then
-//        verify(gymEquipmentRepository).findById(anyLong());
-//        verify(exerciseRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getExerciseDescription()).isEqualTo(exercise.getExerciseDescription());
+    void findExerciseTest() {
+        // given
+        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
+        given(exerciseRepository.findById(anyLong())).willReturn(Optional.of(exercise));
+
+        // when
+        ExerciseResponseDto response = exerciseService.findExercise(1L);
+
+        // then
+        verify(gymEquipmentRepository).findById(anyLong());
+        verify(exerciseRepository).findById(anyLong());
+        assertNotNull(response);
+        assertThat(response.getExerciseDescription()).isEqualTo(exercise.getExerciseDescription());
     }
 
     @Test
     @DisplayName("[Service] AI 코칭 기구 운동 정보 수정 테스트")
-    void findExerciseNotFoundServiceTest() {
-//        // given
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//        given(exerciseRepository.findById(anyLong())).willReturn(Optional.empty());
-//
-//        // when
-//        CustomException exception = assertThrows(CustomException.class, () -> exerciseService.findExercise(1L));
-//
-//        // then
-//        verify(gymEquipmentRepository).findById(anyLong());
-//        verify(exerciseRepository).findById(anyLong());
-//        assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.NOT_EXIST_DATA);
-    }
+    void modifyExerciseTest() {
+        // given
+        given(exerciseRepository.findById(anyLong())).willReturn(Optional.of(exercise));
 
-//    @Test
-//    @DisplayName("[Service] 운동 수정 테스트")
-//    void modifyExerciseServiceTest() {
-//        // given
-//        given(exerciseRepository.findById(anyLong())).willReturn(Optional.of(exercise));
-//
-//        // when
-//        ExerciseResponseDto response = exerciseService.modifyExercise(1L, exerciseRequestDto, "topImage.jpg");
-//
-//        // then
-//        verify(exerciseRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getExerciseDescription()).isEqualTo(exerciseRequestDto.getExerciseDescription());
-//    }
+        // when
+        ExerciseResponseDto response = exerciseService.modifyExercise(1L, exerciseRequestDto, "topImage.jpg");
+
+        // then
+        verify(exerciseRepository).findById(anyLong());
+        assertNotNull(response);
+        assertThat(response.getExerciseDescription()).isEqualTo(exerciseRequestDto.getExerciseDescription());
+    }
 }

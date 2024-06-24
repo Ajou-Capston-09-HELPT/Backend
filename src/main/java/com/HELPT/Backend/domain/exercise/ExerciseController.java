@@ -2,7 +2,6 @@ package com.HELPT.Backend.domain.exercise;
 
 import com.HELPT.Backend.domain.exercise.dto.ExerciseRequestDto;
 import com.HELPT.Backend.domain.exercise.dto.ExerciseResponseDto;
-import com.HELPT.Backend.domain.exercise.service.ExerciseService;
 import com.HELPT.Backend.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

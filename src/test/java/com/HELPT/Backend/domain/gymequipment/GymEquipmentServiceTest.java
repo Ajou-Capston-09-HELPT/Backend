@@ -71,47 +71,47 @@ class GymEquipmentServiceTest {
 
     @Test
     @DisplayName("[Service] 헬스장 기구 등록 테스트")
-    void addGymEquipmentServiceTest() {
+    void addGymEquipmentTest() {
         // given
-//        GymEquipmentRequest request = new GymEquipmentRequest(1L, 1L);
-//        given(equipmentRepository.findById(anyLong())).willReturn(Optional.of(equipment));
-//        given(gymRepository.findById(anyLong())).willReturn(Optional.of(gym));
-//        given(gymEquipmentRepository.save(any(GymEquipment.class))).willReturn(gymEquipment);
-//
-//        // when
-//        GymEquipmentResponse response = gymEquipmentService.addGymEquipment(request);
-//
-//        // then
-//        verify(equipmentRepository).findById(anyLong());
-//        verify(gymRepository).findById(anyLong());
-//        verify(gymEquipmentRepository).save(any(GymEquipment.class));
-//        assertNotNull(response);
-//        assertThat(response.getGymId()).isEqualTo(gym.getId());
-//        assertThat(response.getEquipmentId()).isEqualTo(equipment.getEquipmentId());
+        GymEquipmentRequest request = GymEquipmentRequest.builder()
+                .gymId(1L)
+                .equipmentId(1L)
+                .build();
+        given(equipmentRepository.findById(anyLong())).willReturn(Optional.of(equipment));
+        given(gymRepository.findById(anyLong())).willReturn(Optional.of(gym));
+        given(gymEquipmentRepository.save(any(GymEquipment.class))).willReturn(gymEquipment);
+
+        // when
+        GymEquipmentResponse response = gymEquipmentService.addGymEquipment(request);
+
+        // then
+        verify(equipmentRepository).findById(anyLong());
+        verify(gymRepository).findById(anyLong());
+        verify(gymEquipmentRepository).save(any(GymEquipment.class));
+        assertNotNull(response);
+        assertThat(response.getGymEquipmentId()).isEqualTo(equipment.getEquipmentId());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 기구 상세 조회 테스트")
-    void findGymEquipmentServiceTest() {
-//        // given
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//
-//        // when
-//        GymEquipmentResponse response = gymEquipmentService.findGymEquipment(1L);
-//
-//        // then
-//        verify(gymEquipmentRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getGymId()).isEqualTo(gym.getId());
-//        assertThat(response.getEquipmentId()).isEqualTo(equipment.getEquipmentId());
+    void findGymEquipmentTest() {
+        // given
+        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
+
+        // when
+        GymEquipmentResponse response = gymEquipmentService.findGymEquipment(1L);
+
+        // then
+        verify(gymEquipmentRepository).findById(anyLong());
+        assertNotNull(response);
+        assertThat(response.getGymEquipmentId()).isEqualTo(equipment.getEquipmentId());
     }
 
     @Test
-    @DisplayName("[Service] 헬스장 기구 수정 테스트")
-    void findGymEquipmentsServiceTest() {
+    @DisplayName("[Service] 헬스장 기구 목록 조회 테스트")
+    void findGymEquipmentsTest() {
         // given
-        List<GymEquipment> equipments = Collections.singletonList(gymEquipment);
-        given(gymEquipmentRepository.findByGym_Id(anyLong())).willReturn(equipments);
+        given(gymEquipmentRepository.findByGym_Id(anyLong())).willReturn(Collections.singletonList(gymEquipment));
 
         // when
         List<GymEquipmentResponse> responses = gymEquipmentService.findGymEquipments(1L);
@@ -120,37 +120,40 @@ class GymEquipmentServiceTest {
         verify(gymEquipmentRepository).findByGym_Id(anyLong());
         assertNotNull(responses);
         assertFalse(responses.isEmpty());
-        assertThat(responses.size()).isEqualTo(1);
+        assertThat(responses.get(0).getGymEquipmentId()).isEqualTo(equipment.getEquipmentId());
+    }
+
+    @Test
+    @DisplayName("[Service] 헬스장 기구 수정 테스트")
+    void modifyGymEquipmentTest() {
+        // given
+        GymEquipmentUpdateRequest updateRequest = GymEquipmentUpdateRequest.builder()
+                .customCount(10)
+                .customSet(10)
+                .customWeight(30)
+                .build();
+        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
+
+        // when
+        GymEquipmentResponse response = gymEquipmentService.modifyGymEquipment(1L, updateRequest);
+
+        // then
+        verify(gymEquipmentRepository).findById(anyLong());
+        assertNotNull(response);
+        assertThat(response.getGymEquipmentId()).isEqualTo(equipment.getEquipmentId());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 기구 삭제 테스트")
-    void modifyGymEquipmentServiceTest() {
+    void removeGymEquipmentTest() {
         // given
-//        GymEquipmentUpdateRequest updateRequest = new GymEquipmentUpdateRequest(1L, 2L, 15, 6, 30);
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//
-//        // when
-//        GymEquipmentResponse response = gymEquipmentService.modifyGymEquipment(1L, updateRequest);
-//
-//        // then
-//        verify(gymEquipmentRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getGymId()).isEqualTo(gym.getId());
-//        assertThat(response.getEquipmentId()).isEqualTo(equipment.getEquipmentId());
-    }
+        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
 
-    @Test
-    @DisplayName("[Service] Gym Equipment 삭제 서비스 테스트")
-    void removeGymEquipmentServiceTest() {
-//        // given
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//
-//        // when
-//        gymEquipmentService.removeGymEquipment(1L);
-//
-//        // then
-//        verify(gymEquipmentRepository).deleteById(anyLong());
-    }
+        // when
+        gymEquipmentService.removeGymEquipment(1L);
 
+        // then
+        verify(gymEquipmentRepository).findById(anyLong());
+        verify(gymEquipmentRepository).deleteById(anyLong());
+    }
 }

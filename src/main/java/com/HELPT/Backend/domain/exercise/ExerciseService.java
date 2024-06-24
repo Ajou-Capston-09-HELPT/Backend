@@ -1,4 +1,4 @@
-package com.HELPT.Backend.domain.exercise.service;
+package com.HELPT.Backend.domain.exercise;
 
 import com.HELPT.Backend.domain.exercise.Exercise;
 import com.HELPT.Backend.domain.exercise.dto.ExerciseRequestDto;

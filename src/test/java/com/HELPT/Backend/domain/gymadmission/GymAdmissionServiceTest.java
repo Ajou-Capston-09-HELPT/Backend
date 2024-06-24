@@ -24,10 +24,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GymAdmissionServiceTest {
+
     @Mock
     private MemberRepository memberRepository;
 
@@ -64,119 +66,76 @@ public class GymAdmissionServiceTest {
                 .gym(gym)
                 .build();
         endDate = LocalDate.of(2024, 12, 31);
-//        membership = Membership.builder()
-//                .id
-//                .member(member)
-//                .gym(gym)
-//                .build();
-
     }
+
     @Test
     @DisplayName("[Service] 헬스장 등록 요청 테스트")
-    void findGymAdmissionList_Success(){
+    void addGymAdmissionTest() {
         // given
-        List<GymAdmission> gymAdmissions = Arrays.asList(gymAdmission);
-        when(gymAdmissionRepository.findByGymId(anyLong())).thenReturn(gymAdmissions);
-        GymAdmissionResponse expectedResponse = GymAdmissionResponse.toDto(gymAdmission, gymAdmission.getMember());
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(gymRepository.findById(anyLong())).willReturn(Optional.of(gym));
+        given(gymAdmissionRepository.findByGymAndMember(any(Gym.class), any(Member.class))).willReturn(Optional.empty());
+        given(gymAdmissionRepository.save(any(GymAdmission.class))).willReturn(gymAdmission);
 
         // when
-        List<GymAdmissionResponse> actualResponses = gymAdmissionService.findGymAdmissions(1L);
+        GymAdmission result = gymAdmissionService.addGymAdmission(1L, 1L);
 
         // then
-        assertNotNull(actualResponses, "The returned list should not be null");
-        assertFalse(actualResponses.isEmpty(), "The returned list should not be empty");
-        assertEquals(1, actualResponses.size(), "The size of returned list should match the expected list size");
-        assertEquals(expectedResponse.getGymAdmissionId(), actualResponses.get(0).getGymAdmissionId(), "The id of GymAdmissionResponse should match");
-        assertEquals(expectedResponse.getUserName(), actualResponses.get(0).getUserName(), "The memberId of GymAdmissionResponse should match");
+        verify(memberRepository).findById(anyLong());
+        verify(gymRepository).findById(anyLong());
+        verify(gymAdmissionRepository).findByGymAndMember(any(Gym.class), any(Member.class));
+        verify(gymAdmissionRepository).save(any(GymAdmission.class));
+        assertNotNull(result);
+        assertEquals(gymAdmission.getId(), result.getId());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 등록 요청 목록 조회 테스트")
-    void addGymAdmission_Success() {
+    void findGymAdmissionsTest() {
         // given
-        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
-        when(gymRepository.findById(any())).thenReturn(Optional.of(gym));
-        when(gymAdmissionRepository.save(any(GymAdmission.class))).thenReturn(gymAdmission);
+        List<GymAdmission> gymAdmissions = Arrays.asList(gymAdmission);
+        given(gymAdmissionRepository.findByGymId(anyLong())).willReturn(gymAdmissions);
 
         // when
-        GymAdmission savedAdmission = gymAdmissionService.addGymAdmission(gym.getId(), member.getUserId());
+        List<GymAdmissionResponse> responses = gymAdmissionService.findGymAdmissions(1L);
 
         // then
-        assertNotNull(savedAdmission);
-        assertNotNull(savedAdmission.getGym());
-        assertNotNull(savedAdmission.getMember());
-        assertEquals(gym.getId(), savedAdmission.getGym().getId());
-        assertEquals(member.getUserId(), savedAdmission.getMember().getUserId());
-
-        // Verify using ArgumentCaptor
-        ArgumentCaptor<GymAdmission> captor = ArgumentCaptor.forClass(GymAdmission.class);
-        verify(gymAdmissionRepository).save(captor.capture());
-        GymAdmission captured = captor.getValue();
-        assertNotNull(captured.getGym());
-        assertNotNull(captured.getMember());
-        assertEquals(gym.getId(), captured.getGym().getId());
-        assertEquals(member.getUserId(), captured.getMember().getUserId());
-    }
-
-    @Test
-    @DisplayName("[Service] 헬스장 등록 요청 정보 상세 조회 테스트")
-    void addGymAdmission_MemberNotFound_ThrowsException() {
-        // given
-        when(memberRepository.findById(any())).thenReturn(Optional.empty());
-
-        // when
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            gymAdmissionService.addGymAdmission(gym.getId(), member.getUserId());
-        });
-
-        // then
-        assertEquals("Member not found", exception.getMessage());
+        verify(gymAdmissionRepository).findByGymId(anyLong());
+        assertNotNull(responses);
+        assertEquals(1, responses.size());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 등록 요청 승인 테스트")
-    void addGymAdmission_GymNotFound_ThrowsException() {
+    void approveGymAdmissionTest() {
         // given
-        when(memberRepository.findById(any())).thenReturn(Optional.of(member));
-        when(gymRepository.findById(any())).thenReturn(Optional.empty());
+        given(gymAdmissionRepository.findById(anyLong())).willReturn(Optional.of(gymAdmission));
+        given(membershipRepository.save(any(Membership.class))).willReturn(membership);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
         // when
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            gymAdmissionService.addGymAdmission(gym.getId(), member.getUserId());
-        });
+        Membership result = gymAdmissionService.approveGymAdmission(1L, endDate);
 
         // then
-        assertEquals("Gym not found", exception.getMessage());
+        verify(gymAdmissionRepository).findById(anyLong());
+        verify(membershipRepository).save(any(Membership.class));
+        verify(memberRepository).findById(anyLong());
+        verify(gymAdmissionRepository).deleteById(anyLong());
+        assertNotNull(result);
+        assertEquals(gym.getId(), result.getGymId());
+        assertEquals(member.getUserId(), result.getUserId());
     }
 
-//    @Test
-//    @DisplayName("[Service] 헬스장 등록 요청 테스트")
-//    void approveGymAdmission() {
-////        // given
-////        when(gymAdmissionRepository.findById(1L)).thenReturn(Optional.of(gymAdmission));
-////        when(membershipRepository.save(any(Membership.class))).thenAnswer(i -> i.getArguments()[0]);
-////
-////        // when
-////        Membership result = gymAdmissionService.approveGymAdmission(1L,endDate);
-////
-////        // then
-////        assertNotNull(result, "Membership should not be null");
-////        assertEquals(gym.getId(), result.getGymId(), "Gym ID should match");
-////        assertEquals(member.getUserId(), result.getUserId(), "User ID should match");
-////        assertEquals(endDate, result.getEndDate(), "End date should match");
-////        verify(membershipRepository).save(any(Membership.class));
-//    }
+    @Test
+    @DisplayName("[Service] 헬스장 등록 요청 거절 테스트")
+    void rejectGymAdmissionTest() {
+        // given
+        doNothing().when(gymAdmissionRepository).deleteById(anyLong());
 
-//    @Test
-//    @DisplayName("[Service] 헬스장 등록 요청 테스트")
-//    void rejectGymAdmission() {
-//        // given
-//        Long gymAdmissionId = 1L;
-//
-//        // when
-//        gymAdmissionService.rejectGymAdmission(gymAdmissionId);
-//
-//        // then
-//        verify(gymAdmissionRepository).deleteById(gymAdmissionId);
-//    }
+        // when
+        gymAdmissionService.rejectGymAdmission(1L);
+
+        // then
+        verify(gymAdmissionRepository).deleteById(anyLong());
+    }
 }

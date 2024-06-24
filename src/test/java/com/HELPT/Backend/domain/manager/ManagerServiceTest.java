@@ -64,115 +64,119 @@ class ManagerServiceTest {
 
     @Test
     @DisplayName("[Service] 소셜 로그인 테스트")
-    void registerServiceTest() {
-//        // given
-//        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.empty());
-//        given(managerRepository.save(any(Manager.class))).willReturn(manager);
-//        given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
-//
-//        // when
-//        JWTResponse response = managerService.register(managerRequest);
-//
-//        // then
-//        verify(managerRepository).findByKakaoId(anyString());
-//        verify(managerRepository).save(any(Manager.class));
-//        verify(jwtUtil).createTokens(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getToken().getAccessToken()).isEqualTo(jwtToken.getAccessToken());
+    void socialLoginTest() {
+        // given
+        KakaoLoginRequest kakaoLoginRequest = KakaoLoginRequest.builder()
+                .kakaoId("kakao123")
+                .deviceToken("deviceToken")
+                .build();
+        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.of(manager));
+        given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
+
+        // when
+        JWTResponse response = managerService.login(kakaoLoginRequest);
+
+        // then
+        assertNotNull(response);
+        assertEquals("access_token", response.getAccessToken());
+        verify(managerRepository).findByKakaoId(anyString());
+        verify(jwtUtil).createTokens(anyLong());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 관리자 로그인 테스트")
-    void loginServiceTest() {
-//        // given
-//        KakaoLoginRequest request = new KakaoLoginRequest("kakao123", "device_token");
-//        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.of(manager));
-//        given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
-//
-//        // when
-//        JWTResponse response = managerService.login(request);
-//
-//        // then
-//        verify(managerRepository).findByKakaoId(anyString());
-//        verify(jwtUtil).createTokens(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getToken().getAccessToken()).isEqualTo(jwtToken.getAccessToken());
+    void managerLoginTest() {
+        // given
+        KakaoLoginRequest kakaoLoginRequest = KakaoLoginRequest.builder()
+                .kakaoId("kakao123")
+                .deviceToken("deviceToken")
+                .build();
+        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.of(manager));
+        given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
+
+        // when
+        JWTResponse response = managerService.login(kakaoLoginRequest);
+
+        // then
+        assertNotNull(response);
+        assertEquals("access_token", response.getAccessToken());
+        verify(managerRepository).findByKakaoId(anyString());
+        verify(jwtUtil).createTokens(anyLong());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 관리자 회원 가입 테스트")
-    void findManagerServiceTest() {
-//        // given
-//        given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
-//
-//        // when
-//        ManagerResponse response = managerService.findManager(1L);
-//
-//        // then
-//        verify(managerRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getManagerId()).isEqualTo(manager.getManagerId());
+    void registerManagerTest() {
+        // given
+        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.empty());
+        given(managerRepository.save(any(Manager.class))).willReturn(manager);
+        given(managerRepository.findByKakaoId(anyString())).willReturn(Optional.of(manager));
+        given(jwtUtil.createTokens(anyLong())).willReturn(jwtToken);
+
+        // when
+        JWTResponse response = managerService.register(managerRequest);
+
+        // then
+        assertNotNull(response);
+        assertEquals("access_token", response.getAccessToken());
+        verify(managerRepository).save(any(Manager.class));
+        verify(managerRepository).findByKakaoId(anyString());
+        verify(jwtUtil).createTokens(anyLong());
     }
 
     @Test
     @DisplayName("[Service] 헬스장 관리자 로그아웃 테스트")
-    void findManagersServiceTest() {
-//        // given
-//        List<Manager> managers = Collections.singletonList(manager);
-//        given(managerRepository.findAll()).willReturn(managers);
-//
-//        // when
-//        List<ManagerResponse> responses = managerService.findManagers();
-//
-//        // then
-//        verify(managerRepository).findAll();
-//        assertNotNull(responses);
-//        assertFalse(responses.isEmpty());
-//        assertThat(responses.size()).isEqualTo(1);
+    void logoutManagerTest() {
+        // 추가적으로 로그아웃 테스트 코드 작성 필요
     }
 
     @Test
     @DisplayName("[Service] 헬스장 관리자 회원탈퇴 테스트")
-    void modifyManagerServiceTest() {
-//        // given
-//        given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
-//
-//        // when
-//        ManagerResponse response = managerService.modifyManager(1L, managerRequest);
-//
-//        // then
-//        verify(managerRepository).findById(anyLong());
-//        assertNotNull(response);
-//        assertThat(response.getManagerId()).isEqualTo(manager.getManagerId());
+    void removeManagerTest() {
+        // given
+        given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
+
+        // when
+        managerService.removeManager(1L);
+
+        // then
+        verify(managerRepository).findById(anyLong());
+        verify(managerRepository).delete(any(Manager.class));
     }
 
-//    @Test
-//    @DisplayName("[Service] Manager 삭제 테스트")
-//    void removeManagerServiceTest() {
-//        // given
-//        given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
-//
-//        // when
-//        managerService.removeManager(1L);
-//
-//        // then
-//        verify(managerRepository).findById(anyLong());
-//        verify(managerRepository).delete(any(Manager.class));
-//    }
+    @Test
+    @DisplayName("[Service] 헬스장 관리자 목록 조회 테스트")
+    void findManagersTest() {
+        // given
+        given(managerRepository.findAll()).willReturn(Collections.singletonList(manager));
 
-//    @Test
-//    @DisplayName("[Service] 특정 헬스장의 회원 목록 조회 테스트")
-//    void memberListServiceTest() {
-////        // given
-////        List<MemberJoinResponse> members = List.of(new MemberJoinResponse());
-////        given(managerRepository.MemberList(anyLong())).willReturn(members);
-////
-////        // when
-////        List<MemberJoinResponse> result = managerService.memberList(1L);
-////
-////        // then
-////        verify(managerRepository).MemberList(anyLong());
-////        assertNotNull(result);
-////        assertFalse(result.isEmpty());
-//    }
+        // when
+        List<ManagerResponse> responses = managerService.findManagers();
+
+        // then
+        assertNotNull(responses);
+        assertEquals(1, responses.size());
+        verify(managerRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("[Service] 헬스장 관리자 상세 조회 테스트")
+    void findManagerTest() {
+        // given
+        given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
+
+        // when
+        ManagerResponse response = managerService.findManager(1L);
+
+        // then
+        assertNotNull(response);
+        assertEquals(manager.getGym().getId(), response.getGymId());
+        verify(managerRepository).findById(anyLong());
+    }
+
+    @Test
+    @DisplayName("[Service] 헬스장 관리자 수정 테스트")
+    void modifyManagerTest() {
+        // 추가적으로 수정 테스트 코드 작성 필요
+    }
 }

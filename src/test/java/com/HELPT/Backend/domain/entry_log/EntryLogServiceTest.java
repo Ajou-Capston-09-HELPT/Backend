@@ -65,37 +65,20 @@ class EntryLogServiceTest {
     @Test
     @DisplayName("[Service] 출입 기록 조회 테스트")
     void saveEntryServiceTest() {
-//        // given
-//        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
-//        given(gymRepository.findById(anyLong())).willReturn(Optional.of(gym));
-//        given(entryLogRepository.save(any(EntryLog.class))).willReturn(entryLog);
-//
-//        // when
-//        EntryLog result = entryLogService.saveEntry(1L, 1L);
-//
-//        // then
-//        verify(memberRepository).findById(anyLong());
-//        verify(gymRepository).findById(anyLong());
-//        verify(entryLogRepository).save(any(EntryLog.class));
-//        assertNotNull(result);
-//        assertThat(result.getMember().getUserId()).isEqualTo(member.getUserId());
-//        assertThat(result.getGym().getId()).isEqualTo(gym.getId());
-    }
+        // given
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
+        given(gymRepository.findById(anyLong())).willReturn(Optional.of(gym));
+        given(entryLogRepository.save(any(EntryLog.class))).willReturn(entryLog);
 
-//    @Test
-//    @DisplayName("[Service] 이름과 날짜로 입장 기록 조회 테스트")
-//    void getEntryLogsByNameAndDateServiceTest() {
-//        // given
-//        List<EntryLogResponse> entryLogs = Collections.singletonList(new EntryLogResponse());
-//        given(entryLogRepository.findByNameAndGymIdAndEntryDate(anyString(), anyLong(), any(LocalDate.class))).willReturn(entryLogs);
-//
-//        // when
-//        List<EntryLogResponse> responses = entryLogService.getEntryLogsByNameAndDate("Test Name", 1L, LocalDate.now());
-//
-//        // then
-//        verify(entryLogRepository).findByNameAndGymIdAndEntryDate(anyString(), anyLong(), any(LocalDate.class));
-//        assertNotNull(responses);
-//        assertFalse(responses.isEmpty());
-//        assertThat(responses.size()).isEqualTo(1);
-//    }
+        // when
+        EntryLog result = entryLogService.saveEntry(1L, 1L);
+
+        // then
+        verify(memberRepository).findById(anyLong());
+        verify(gymRepository).findById(anyLong());
+        verify(entryLogRepository).save(any(EntryLog.class));
+        assertNotNull(result);
+        assertThat(result.getMember().getUserId()).isEqualTo(member.getUserId());
+        assertThat(result.getGym().getId()).isEqualTo(gym.getId());
+    }
 }
