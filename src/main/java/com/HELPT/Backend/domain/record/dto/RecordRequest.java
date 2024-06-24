@@ -30,7 +30,7 @@ public class RecordRequest {
 
     @Builder
     public RecordRequest(Long gymEquipmentId, int count, int setNumber, int weight, LocalDate recordDate, float successRate,
-                         String recordTime ,String comment) {
+                         String recordTime ,String comment,String snapshotFile) {
         this.recordTime = recordTime;
         this.gymEquipmentId = gymEquipmentId;
         this.count = count;
@@ -38,6 +38,7 @@ public class RecordRequest {
         this.weight = weight;
         this.successRate = successRate;
         this.comment=comment;
+        this.snapshotFile=snapshotFile;
     }
 
     public void setSnapshotFile(String snapshotFile) {

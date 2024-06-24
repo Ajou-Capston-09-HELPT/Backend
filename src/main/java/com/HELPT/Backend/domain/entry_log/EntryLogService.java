@@ -23,6 +23,10 @@ public class EntryLogService {
     private final MemberRepository memberRepository;
     private final GymRepository gymRepository;
 
+    public List<EntryLogResponse> getEntryLogsByNameAndDate(String name, Long gymId, LocalDate date) {
+        return entryLogRepository.findByNameAndGymIdAndEntryDate(name, gymId, date);
+    }
+
     @Transactional
     public EntryLog saveEntry(Long memberId,Long gymId) {
         Optional<Member> findmember = Optional.ofNullable(memberRepository.findById(memberId)
@@ -35,9 +39,5 @@ public class EntryLogService {
                 .build();
         entryLogRepository.save(entryLog);
         return entryLog;
-    }
-
-    public List<EntryLogResponse> getEntryLogsByNameAndDate(String name, Long gymId, LocalDate date) {
-        return entryLogRepository.findByNameAndGymIdAndEntryDate(name, gymId, date);
     }
 }

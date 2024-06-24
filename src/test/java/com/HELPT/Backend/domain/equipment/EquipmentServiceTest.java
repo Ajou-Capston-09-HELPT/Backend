@@ -76,7 +76,7 @@ class EquipmentServiceTest {
     }
 
     @Test
-    @DisplayName("[Service] 기구 생성 서비스 테스트")
+    @DisplayName("[Service] AI 코칭 기구 등록 테스트")
     void saveEquipmentServiceTest(){
         // given
         EquipmentDto equipmentDto = setUpEquipmentDto();
@@ -91,7 +91,7 @@ class EquipmentServiceTest {
     }
 
     @Test
-    @DisplayName("[Service] 기구 단건 조회 서비스 테스트")
+    @DisplayName("[Service] AI 코칭 기구 상세 조회 테스트")
     void findEquipmentServiceTest(){
         // given
         Equipment equipment = setUpEquipment();
@@ -107,7 +107,7 @@ class EquipmentServiceTest {
     }
 
     @Test
-    @DisplayName("[Service] 기구 리스트 조회 서비스 테스트")
+    @DisplayName("[Service] AI 코칭 기구 목록 조회 테스트")
     void findEquipmentListServiceTest(){
         // given
         List<Equipment> equipments = setUpEquipmentList();
@@ -122,7 +122,7 @@ class EquipmentServiceTest {
     }
 
     @Test
-    @DisplayName("[Service] 기구 수정 서비스 테스트")
+    @DisplayName("[Service] AI 코칭 기구 수정 테스트")
     void modifyEquipmenServiceTest(){
         // given
         Equipment equipment = setUpEquipment();
@@ -137,7 +137,7 @@ class EquipmentServiceTest {
     }
 
     @Test
-    @DisplayName("[Service] 기구 삭제 서비스 테스트")
+    @DisplayName("[Service] AI 코칭 기구 삭제 테스트")
     void removeEquipmenServiceTest(){
         // given
         Equipment equipment = setUpEquipment();

@@ -6,7 +6,7 @@ import com.HELPT.Backend.domain.equipment.dto.EquipmentRequestDto;
 import com.HELPT.Backend.domain.equipment.EquipmentService;
 import com.HELPT.Backend.domain.exercise.Exercise;
 import com.HELPT.Backend.domain.exercise.dto.ExerciseResponseDto;
-import com.HELPT.Backend.domain.exercise.service.ExerciseService;
+import com.HELPT.Backend.domain.exercise.ExerciseService;
 import com.HELPT.Backend.domain.gym.GymService;
 import com.HELPT.Backend.domain.gym.dto.GymRegistrationDto;
 import com.HELPT.Backend.domain.gym.entity.Gym;
