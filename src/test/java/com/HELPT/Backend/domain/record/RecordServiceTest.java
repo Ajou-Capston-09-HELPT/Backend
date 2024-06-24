@@ -44,80 +44,67 @@ class RecordServiceTest {
 
     @BeforeEach
     void setUp() {
-//        gymEquipment = GymEquipment.builder()
-//                .id(1L)
-//                .build();
-//
-//        record = Record.builder()
-//                .id(1L)
-//                .userId(1L)
-//                .gymEquipment(gymEquipment)
-//                .count(10)
-//                .setNumber(3)
-//                .weight(50)
-//                .recordDate(LocalDate.now())
-//                .successRate(100)
-//                .comment("Good workout")
-//                .recordTime("10:00 AM")
-//                .snapshotFile("snapshot.jpg")
-//                .build();
-//
-//        recordRequest = RecordRequest.builder()
-//                .gymEquipmentId(1L)
-//                .count(10)
-//                .setNumber(3)
-//                .weight(50)
-//                .successRate(100)
-//                .comment("Good workout")
-//                .recordTime("10:00 AM")
-//                .snapshotFile("snapshot.jpg")
-//                .build();
+        gymEquipment = GymEquipment.builder()
+                .id(1L)
+                .build();
+
+        record = Record.builder()
+                .recordId(1L)
+                .userId(1L)
+                .gymEquipment(gymEquipment)
+                .count(10)
+                .setNumber(3)
+                .weight(50)
+                .recordDate(LocalDate.now())
+                .successRate(100)
+                .comment("Good workout")
+                .recordTime("10:00 AM")
+                .snapshotFile("snapshot.jpg")
+                .build();
+
+        recordRequest = RecordRequest.builder()
+                .gymEquipmentId(1L)
+                .count(10)
+                .setNumber(3)
+                .weight(50)
+                .successRate(100)
+                .comment("Good workout")
+                .recordTime("10:00 AM")
+                .snapshotFile("snapshot.jpg")
+                .build();
     }
 
     @Test
     @DisplayName("[Service] 운동 기록 생성 테스트")
     void saveRecordServiceTest() {
-//        // given
-//        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
-//        given(recordRepository.save(any(Record.class))).willReturn(record);
-//
-//        // when
-//        RecordResponse response = recordService.saveRecord(1L, recordRequest);
-//
-//        // then
-//        verify(gymEquipmentRepository).findById(anyLong());
-//        verify(recordRepository).save(any(Record.class));
-//        assertNotNull(response);
-//        assertThat(response.getUserId()).isEqualTo(record.getUserId());
+        // given
+        given(gymEquipmentRepository.findById(anyLong())).willReturn(Optional.of(gymEquipment));
+        given(recordRepository.save(any(Record.class))).willReturn(record);
+
+        // when
+        RecordResponse response = recordService.saveRecord(1L, recordRequest);
+
+        // then
+        verify(gymEquipmentRepository).findById(anyLong());
+        verify(recordRepository).save(any(Record.class));
+        assertNotNull(response);
     }
 
     @Test
     @DisplayName("[Service] 날짜별 운동기록 조회 테스트")
     void detailServiceTest() {
-//        // given
-//        List<Record> records = Collections.singletonList(record);
-//        given(recordRepository.findAllByUserIdAndRecordDate(anyLong(), any(LocalDate.class))).willReturn(Optional.of(records));
-//
-//        // when
-//        List<RecordResponse> responses = recordService.detail(1L, LocalDate.now());
-//
-//        // then
-//        verify(recordRepository).findAllByUserIdAndRecordDate(anyLong(), any(LocalDate.class));
-//        assertNotNull(responses);
-//        assertFalse(responses.isEmpty());
-//        assertThat(responses.size()).isEqualTo(1);
+        // given
+        List<Record> records = Collections.singletonList(record);
+        given(recordRepository.findAllByUserIdAndRecordDate(anyLong(), any(LocalDate.class))).willReturn(Optional.of(records));
+
+        // when
+        List<RecordResponse> responses = recordService.detail(1L, LocalDate.now());
+
+        // then
+        verify(recordRepository).findAllByUserIdAndRecordDate(anyLong(), any(LocalDate.class));
+        assertNotNull(responses);
+        assertFalse(responses.isEmpty());
+        assertThat(responses.size()).isEqualTo(1);
     }
-
-    @Test
-    @DisplayName("[Service] 운동기록 상세 조회 테스트")
-    void a() {}
-
-    @Test
-    @DisplayName("[Service] 운동 기록 수정 테스트")
-    void b() {}
-
-    @Test
-    @DisplayName("[Service] 운동 기록 삭제 테스트")
-    void c() {}
 
 }

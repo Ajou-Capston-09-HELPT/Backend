@@ -66,17 +66,17 @@ public class ProductServiceTest {
     @Test
     @DisplayName("[Product] 헬스장 상품 등록 테스트")
     void saveProduct(){
-//        // given
-//        ProductRequest productRequest = setupProductRequest();
-//        Product product = setupProduct();
-//        given(productRepository.save(any(Product.class))).willReturn(product);
-//
-//        // when
-//        ProductResponse productResponse = productService.addProduct(1L,productRequest);
-//
-//        // then
-//        verify(productRepository).save(any(Product.class));
-//        assertEquals(productResponse.getProductId(),product.getProductId());
+        // given
+        ProductRequest productRequest = setupProductRequest();
+        Product product = setupProduct();
+        given(productRepository.save(any(Product.class))).willReturn(product);
+
+        // when
+        ProductResponse productResponse = productService.addProduct(1L,productRequest);
+
+        // then
+        verify(productRepository).save(any(Product.class));
+        assertEquals(productResponse.getProductId(),product.getProductId());
     }
 
     @Test
@@ -96,13 +96,30 @@ public class ProductServiceTest {
     @Test
     @DisplayName("[Product] 상품 수정 테스트")
     void a(){
+        // given
+        Product product = setupProduct();
+        ProductRequest productRequest = setupProductRequest();
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        // when
+        ProductResponse productResponse = productService.modifyProduct(1L,1L,productRequest);
 
+        // then
+        verify(productRepository).findById(any(Long.class));
+        assertEquals(productResponse.getProductId(),product.getProductId());
     }
 
     @Test
     @DisplayName("[Product] 상품 삭제 테스트")
     void b(){
+        // given
+        Product product = setupProduct();
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
+        // when
+        productService.deleteProduct(product.getProductId());
+
+        // then
+        verify(productRepository).deleteById(any(Long.class));
     }
 
 
